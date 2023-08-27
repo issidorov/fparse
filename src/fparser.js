@@ -243,6 +243,10 @@ export default class Formula {
                         // left named var separator char found, seems to be the beginning of a named var:
                         state = 'within-named-var';
                         tmp = '';
+                    } else if (char === '"') {
+                        // left string separator char found
+                        state = 'within-string';
+                        tmp = '';
                     } else if (char.match(/[a-zA-Z]/)) {
                         // multiple chars means it may be a function, else its a var which counts as own expression:
                         if (act < lastChar && str.charAt(act + 1).match(/[a-zA-Z0-9_]/)) {
@@ -314,6 +318,18 @@ export default class Formula {
                         tmp += char;
                     } else {
                         throw new Error('Character not allowed within named variable: ' + char);
+                    }
+                    break;
+
+                case 'within-string':
+                    char = str.charAt(act);
+                    if (char === '"') {
+                        // end of string, create expression:
+                        expressions.push(new ValueExpression(tmp, 'string'));
+                        tmp = '';
+                        state = 0;
+                    } else {
+                        tmp += char;
                     }
                     break;
 
@@ -556,11 +572,23 @@ class BracketExpression extends Expression {
 }
 
 class ValueExpression extends Expression {
-    constructor(value) {
+    constructor(value, type) {
         super();
-        this.value = Number(value);
-        if (isNaN(this.value)) {
-            throw new Error('Cannot parse number: ' + value);
+        if (type === undefined) {
+            type = 'number';
+        }
+        switch (type) {
+            case 'number':
+                this.value = Number(value);
+                if (isNaN(this.value)) {
+                    throw new Error('Cannot parse number: ' + value);
+                }
+                break;
+            case 'string':
+                this.value = String(value);
+                break;
+            default:
+                throw new Error('Invalid value type: ' + type);
         }
     }
     evaluate(params = {}) {
