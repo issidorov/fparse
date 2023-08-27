@@ -532,6 +532,24 @@ export default class Formula {
     }
 }
 
+class MathOperatorHelper {
+    static throwIfNotNumber(value) {
+        const valueType = typeof value;
+        if (valueType !== 'number') {
+            throw new Error('Math operators required type of number: given is ' + valueType);
+        }
+    }
+}
+
+class MathFunctionHelper {
+    static throwIfNotNumber(value) {
+        const valueType = typeof value;
+        if (valueType !== 'number') {
+            throw new Error('Math functions required type of number: given is ' + valueType);
+        }
+    }
+}
+
 class Expression {
     static createOperatorExpression(operator, left = null, right = null) {
         if (operator === '^') {
@@ -611,11 +629,15 @@ class PlusMinusExpression extends Expression {
     }
 
     evaluate(params = {}) {
+        const leftValue = this.left.evaluate(params);
+        const rightValue = this.right.evaluate(params);
+        MathOperatorHelper.throwIfNotNumber(leftValue);
+        MathOperatorHelper.throwIfNotNumber(rightValue);
         if (this.operator === '+') {
-            return this.left.evaluate(params) + this.right.evaluate(params);
+            return leftValue + rightValue;
         }
         if (this.operator === '-') {
-            return this.left.evaluate(params) - this.right.evaluate(params);
+            return leftValue - rightValue;
         }
         throw new Error('Unknown operator for PlusMinus expression');
     }
@@ -637,11 +659,15 @@ class MultDivExpression extends Expression {
     }
 
     evaluate(params = {}) {
+        const leftValue = this.left.evaluate(params);
+        const rightValue = this.right.evaluate(params);
+        MathOperatorHelper.throwIfNotNumber(leftValue);
+        MathOperatorHelper.throwIfNotNumber(rightValue);
         if (this.operator === '*') {
-            return this.left.evaluate(params) * this.right.evaluate(params);
+            return leftValue * rightValue;
         }
         if (this.operator === '/') {
-            return this.left.evaluate(params) / this.right.evaluate(params);
+            return leftValue / rightValue;
         }
         throw new Error('Unknown operator for MultDiv expression');
     }
@@ -659,7 +685,11 @@ class PowerExpression extends Expression {
     }
 
     evaluate(params = {}) {
-        return Math.pow(this.base.evaluate(params), this.exponent.evaluate(params));
+        const baseValue = this.base.evaluate(params);
+        const exponentValue = this.exponent.evaluate(params);
+        MathOperatorHelper.throwIfNotNumber(baseValue);
+        MathOperatorHelper.throwIfNotNumber(exponentValue);
+        return Math.pow(baseValue, exponentValue);
     }
 
     toString() {
@@ -678,6 +708,10 @@ class FunctionExpression extends Expression {
     evaluate(params = {}) {
         params = params || {};
         const paramValues = this.argumentExpressions.map((a) => a.evaluate(params));
+
+        paramValues.forEach((paramValue) => {
+            MathFunctionHelper.throwIfNotNumber(paramValue);
+        });
 
         // If the params object itself has a function definition with
         // the function name, call this one:
