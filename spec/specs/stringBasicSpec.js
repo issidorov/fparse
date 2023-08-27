@@ -11,4 +11,9 @@ describe('String basic feature', function () {
     it('support parsing with double quotes', function () {
         expect(Fparser.calc('"foo"')).toEqual('foo');
     });
+
+    it('support usage by variable', function () {
+        expect(Fparser.calc('x', { x: 'foo' })).toEqual('foo');
+        expect(Fparser.calc('[myVar]', { myVar: 'foo' })).toEqual('foo');
+    });
 });

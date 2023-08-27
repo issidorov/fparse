@@ -728,7 +728,7 @@ class VariableExpression extends Expression {
         // a varname found in the params, return the value.
         // eg: params = {x: 5,y:3}, varname = x, return 5
         if (params[this.varName] !== undefined) {
-            return Number(params[this.varName]);
+            return params[this.varName];
         } else {
             throw new Error('Cannot evaluate ' + this.varName + ': No value given');
         }
