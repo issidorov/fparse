@@ -9,6 +9,7 @@
         "docker-shell": "docker run --rm -ti -v \"$PWD\":/usr/src/app -w /usr/src/app fparser bash",
         "docker-demopage": "docker run --rm -ti -v \"$PWD\":/usr/src/app -w /usr/src/app/demopage -p 3000:8080 fparser npm run serve",
         "docker-test": "docker run --rm -ti -v \"$PWD\":/usr/src/app -w /usr/src/app fparser npm run test",
+        "watch": "NODE_ENV=development webpack watch",
         "build-dev": "NODE_ENV=development webpack",
         "build-demopage-image": "docker build --pull -t fparser-demopage .",
         "build": "NODE_ENV=production webpack",
