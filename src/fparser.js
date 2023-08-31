@@ -132,13 +132,21 @@ export default class Formula {
      * Cleans the input string from unnecessary whitespace,
      * and replaces some known constants:
      */
-    cleanupInputString(s) {
-        s = s.replace(/[\s]+/g, '');
-        // surround known math constants with [], to parse them as named variables [xxx]:
-        Object.keys(MATH_CONSTANTS).forEach((c) => {
-            s = s.replace(new RegExp(`\\b${c}\\b`, 'g'), `[${c}]`);
+    cleanupInputFormula(s) {
+        const resParts = [];
+        const srcParts = s.split('"');
+        srcParts.forEach((part, index) => {
+            // skip parts marked as string
+            if (index % 2 === 0) {
+                part = part.replace(/[\s]+/g, '');
+                // surround known math constants with [], to parse them as named variables [xxx]:
+                Object.keys(MATH_CONSTANTS).forEach((c) => {
+                    part = part.replace(new RegExp(`\\b${c}\\b`, 'g'), `[${c}]`);
+                });
+            }
+            resParts.push(part);
         });
-        return s;
+        return resParts.join('"');
     }
 
     /**
@@ -183,7 +191,7 @@ export default class Formula {
      */
     parse(str) {
         // clean the input string first. spaces, math constant replacements etc.:
-        str = this.cleanupInputString(str);
+        str = this.cleanupInputFormula(str);
         // start recursive call to parse:
         return this._do_parse(str);
     }
