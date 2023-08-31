@@ -12,6 +12,23 @@ describe('String basic feature', function () {
         expect(Fparser.calc('"foo"')).toEqual('foo');
     });
 
+    it('allow spaces', function () {
+        expect(Fparser.calc('" "')).toEqual(' ');
+        expect(Fparser.calc('"   "')).toEqual('   ');
+    });
+
+    it('allow special chars', function () {
+        expect(Fparser.calc('"["')).toEqual('[');
+        expect(Fparser.calc('"]"')).toEqual(']');
+        expect(Fparser.calc('"("')).toEqual('(');
+        expect(Fparser.calc('")"')).toEqual(')');
+        expect(Fparser.calc('"*+-/^"')).toEqual('*+-/^');
+    });
+
+    it('correct in parentheses', function () {
+        expect(Fparser.calc('(")")')).toEqual(')');
+    });
+
     it('support usage by variable', function () {
         expect(Fparser.calc('x', { x: 'foo' })).toEqual('foo');
         expect(Fparser.calc('[myVar]', { myVar: 'foo' })).toEqual('foo');
