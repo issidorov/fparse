@@ -201,7 +201,8 @@ export default class Formula {
             char = '',
             tmp = '',
             funcName = null,
-            pCount = 0;
+            pCount = 0,
+            pStringOpened = false;
 
         while (act <= lastChar) {
             switch (state) {
@@ -336,7 +337,15 @@ export default class Formula {
                 case 'within-parentheses':
                 case 'within-func-parentheses':
                     char = str.charAt(act);
-                    if (char === ')') {
+                    if (pStringOpened) {
+                        // If string is opened, then:
+                        if (char === '"') {
+                            // end of string
+                            pStringOpened = false;
+                        }
+                        // accumulate string chars
+                        tmp += char;
+                    } else if (char === ')') {
                         //Check if this is the matching closing parenthesis.If not, just read ahead.
                         if (pCount <= 0) {
                             // Yes, we found the closing parenthesis, create new sub-expression:
@@ -357,6 +366,10 @@ export default class Formula {
                     } else if (char === '(') {
                         // begin of a new sub-parenthesis, increase counter:
                         pCount++;
+                        tmp += char;
+                    } else if (char === '"') {
+                        // start of string
+                        pStringOpened = true;
                         tmp += char;
                     } else {
                         // all other things are just added to the sub-expression:
