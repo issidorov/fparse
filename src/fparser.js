@@ -571,6 +571,16 @@ class MathFunctionHelper {
     }
 }
 
+class StringFunctions {
+    static concat() {
+        let res = '';
+        for (let item of arguments) {
+            res += String(item);
+        }
+        return res;
+    }
+}
+
 class Expression {
     static createOperatorExpression(operator, left = null, right = null) {
         if (operator === '^') {
@@ -749,6 +759,10 @@ class FunctionExpression extends Expression {
                 MathFunctionHelper.throwIfNotNumber(paramValue);
             });
             return Math[this.fn].apply(this, paramValues);
+        }
+        // This is string function? Call it:
+        else if (StringFunctions[this.fn] instanceof Function) {
+            return StringFunctions[this.fn].apply(this, paramValues);
         }
         // No more options left: sorry!
         else {
