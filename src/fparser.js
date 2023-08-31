@@ -730,10 +730,6 @@ class FunctionExpression extends Expression {
         params = params || {};
         const paramValues = this.argumentExpressions.map((a) => a.evaluate(params));
 
-        paramValues.forEach((paramValue) => {
-            MathFunctionHelper.throwIfNotNumber(paramValue);
-        });
-
         // If the params object itself has a function definition with
         // the function name, call this one:
         if (params[this.fn] instanceof Function) {
@@ -749,6 +745,9 @@ class FunctionExpression extends Expression {
         }
         // Has the JS Math object a function as requested? Call it:
         else if (Math[this.fn] instanceof Function) {
+            paramValues.forEach((paramValue) => {
+                MathFunctionHelper.throwIfNotNumber(paramValue);
+            });
             return Math[this.fn].apply(this, paramValues);
         }
         // No more options left: sorry!

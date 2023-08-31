@@ -34,6 +34,13 @@ describe('String basic feature', function () {
         expect(Fparser.calc('[myVar]', { myVar: 'foo' })).toEqual('foo');
     });
 
+    it('support usage by custom function', function () {
+        const myFnFoo = (x) => 'foo' + x;
+        expect(Fparser.calc('myFnFoo("bar")', { myFnFoo: myFnFoo })).toEqual('foobar');
+        expect(Fparser.calc('myFnFoo(x)', { myFnFoo: myFnFoo, x: 'bar' })).toEqual('foobar');
+        expect(Fparser.calc('myFnFoo([myVar])', { myFnFoo: myFnFoo, myVar: 'bar' })).toEqual('foobar');
+    });
+
     it('blocking math operator "*" of number and variable', function () {
         const expectedError = 'Math operators required type of number: given is string';
         expect(() => Fparser.calc('2x', { x: 'foo' })).toThrowError(expectedError);
