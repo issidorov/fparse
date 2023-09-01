@@ -1,15 +1,15 @@
 describe('String functions', function () {
-    var Fparser;
+    var Formula;
     beforeEach(function () {
         if (typeof require !== 'undefined') {
-            Fparser = require('../../dist/fparser-dev');
+            Formula = require('../../dist/fparser-dev');
         } else {
-            Fparser = window.Formula;
+            Formula = window.Formula;
         }
     });
 
     it('concat', function () {
-        expect(Fparser.calc('concat("foo", "bar")')).toEqual('foobar');
-        expect(Fparser.calc('concat("foo", " ", "bar")')).toEqual('foo bar');
+        expect(Formula.calc('concat("foo", "bar")')).toEqual('foobar');
+        expect(Formula.calc('concat("foo", " ", "bar")')).toEqual('foo bar');
     });
 });
