@@ -23,7 +23,7 @@ Parses a mathematical formula from a string. Known expressions:
 * the use of single-char *variables* (like '2x')
 * the use of named variables (like '2*[myVar]')
 * the use of strings by function arguments (like 'concat("Size: ", 2, " mm")')
-* the use of strings by named variables (like 'concat("Size: ", 2, " ", [unit])')
+* the use of strings by variables (like 'concat("Size: ", 2, " ", [unit])')
 * *memoization*: store already evaluated results for faster re-calcs
 * use it in Web pages, as ES6 module or as NodeJS module
 * Example:<br /> <code>-1*(sin(2^x)/(PI*x))*cos(x))</code>
