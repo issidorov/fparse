@@ -22,6 +22,8 @@ Parses a mathematical formula from a string. Known expressions:
 * the use of *own functions*
 * the use of single-char *variables* (like '2x')
 * the use of named variables (like '2*[myVar]')
+* the use of strings by function arguments (like 'concat("Size: ", 2, " mm")')
+* the use of strings by named variables (like 'concat("Size: ", 2, " ", [unit])')
 * *memoization*: store already evaluated results for faster re-calcs
 * use it in Web pages, as ES6 module or as NodeJS module
 * Example:<br /> <code>-1*(sin(2^x)/(PI*x))*cos(x))</code>
@@ -102,6 +104,16 @@ let result = fObj.evaluate({
 
 If defined in the value object AND on the formula object, the Value object has the precedence
 ```
+
+### Using strings
+
+```javascript
+const fObj = new Formula('concat("Size: ", x * 1000, " mm")', { supportStrings: true });
+let result = fObj.evaluate({ x: 1.5 });
+```
+
+So far, only one string function `concat` has been implemented.
+You can implement other functions using "user-defined functions".
 
 ### Re-use a Formula object
 
