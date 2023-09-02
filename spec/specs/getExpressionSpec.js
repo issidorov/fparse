@@ -29,9 +29,13 @@ describe('Get Expression tests', function() {
     });
 
     describe('ValueExpression::toString', () => {
-        it('returns the expression as expression string', () => {
+        it('returns the expression as expression string on the number', () => {
             let inst = new Fparser.ValueExpression('   -0.3   ');
             expect(inst.toString()).toEqual('-0.3');
+        });
+        it('returns the expression as expression string on the string', () => {
+            let inst = new Fparser.ValueExpression('   foo   ', 'string');
+            expect(inst.toString()).toEqual('"   foo   "');
         });
     });
 

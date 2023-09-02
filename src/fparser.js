@@ -639,12 +639,20 @@ class ValueExpression extends Expression {
             default:
                 throw new Error('Invalid value type: ' + type);
         }
+        this.type = type;
     }
     evaluate(params = {}) {
         return this.value;
     }
     toString() {
-        return String(this.value);
+        switch (this.type) {
+            case 'number':
+                return String(this.value);
+            case 'string':
+                return String('"' + this.value + '"');
+            default:
+                throw new Error('Invalid type');
+        }
     }
 }
 
