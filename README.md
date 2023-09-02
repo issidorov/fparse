@@ -108,7 +108,7 @@ If defined in the value object AND on the formula object, the Value object has t
 ### Using strings
 
 ```javascript
-const fObj = new Formula('concat("Size: ", x * 1000, " mm")', { supportStrings: true });
+const fObj = new Formula('concat("Size: ", x * 1000, " mm")');
 let result = fObj.evaluate({ x: 1.5 });
 ```
 
